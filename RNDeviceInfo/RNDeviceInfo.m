@@ -141,6 +141,14 @@ RCT_EXPORT_MODULE()
   return country;
 }
 
+- (BOOL) devicePluggedIn
+{
+  UIDevice *currentDevice = [UIDevice currentDevice];
+  UIDeviceBatteryState batteryState = [UIDevice currentDevice].batteryState;
+
+  return batteryState != UIDeviceBatteryStateUnplugged;
+}
+
 - (NSDictionary *)constantsToExport
 {
     UIDevice *currentDevice = [UIDevice currentDevice];
