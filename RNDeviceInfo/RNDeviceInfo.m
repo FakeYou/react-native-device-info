@@ -24,6 +24,21 @@ RCT_EXPORT_MODULE()
     return dispatch_get_main_queue();
 }
 
+- (instancetype)init
+{
+  if ((self = [super init])) {
+    UIDevice *device = [UIDevice currentDevice];
+    device.batteryMonitoringEnabled = YES;
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(batteryLevelChanged:)
+                                                 name:UIDeviceBatteryStateDidChangeNotification
+                                               object:device];
+  }
+
+  return self;
+}
+
 - (NSString*) deviceId
 {
     struct utsname systemInfo;
@@ -141,14 +156,6 @@ RCT_EXPORT_MODULE()
   return country;
 }
 
-- (BOOL) devicePluggedIn
-{
-  UIDevice *currentDevice = [UIDevice currentDevice];
-  UIDeviceBatteryState batteryState = [UIDevice currentDevice].batteryState;
-
-  return batteryState != UIDeviceBatteryStateUnplugged;
-}
-
 - (NSDictionary *)constantsToExport
 {
     UIDevice *currentDevice = [UIDevice currentDevice];
@@ -171,6 +178,16 @@ RCT_EXPORT_MODULE()
              @"systemManufacturer": @"Apple",
              @"userAgent": self.userAgent,
              };
+}
+
+RCT_EXPORT_METHOD(devicePluggedIn:(RCTResponseSenderBlock)callback) {
+  UIDevice *device = [UIDevice currentDevice];
+  UIDeviceBatteryState batteryState = device.batteryState;
+
+  bool isPluggedIn = (batteryState != UIDeviceBatteryStateUnplugged);
+  NSNumber *pluggedIn = [NSNumber numberWithBool:isPluggedIn];
+
+  callback(@[[NSNull null], pluggedIn]);
 }
 
 @end

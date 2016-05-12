@@ -47,7 +47,7 @@ module.exports = {
   getDeviceCountry: function() {
     return RNDeviceInfo.deviceCountry;
   },
-  getPluggedIn: function() {
-    return RNDeviceInfo.devicePluggedIn;
+  isPluggedIn: function(cb) {
+    RNDeviceInfo.devicePluggedIn(cb);
   }
 };
