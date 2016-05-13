@@ -29,11 +29,6 @@ RCT_EXPORT_MODULE()
   if ((self = [super init])) {
     UIDevice *device = [UIDevice currentDevice];
     device.batteryMonitoringEnabled = YES;
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(batteryLevelChanged:)
-                                                 name:UIDeviceBatteryStateDidChangeNotification
-                                               object:device];
   }
 
   return self;
